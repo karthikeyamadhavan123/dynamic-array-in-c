@@ -1,49 +1,54 @@
-// dynamic array implementation
-
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 
-void main()
+int main()
 {
-    printf("Welcome to the library of c!\n");
+    printf("Welcome to the library of C!\n");
 
     int size = 10;
-
-    int newArray[size];
-    int *ptr = newArray;
-
     int currLen = 0;
+
+    int *newArray = (int *)malloc(size * sizeof(int));
+    if (newArray == NULL) {
+        printf("Memory allocation failed\n");
+        return 1;
+    }
 
     while (1)
     {
         int value;
-        char command[5];
-        printf("Enter the number here : ");
+        printf("Enter the number here (-1 to exit): ");
         scanf("%d", &value);
 
-        if (currLen < size / 2)
-        {
-            // printf("val %d\n",value);
-            // printf("Current size is %d\n", size);
-            newArray[currLen] = value;     
-            printf("this is in the old array %d\n", newArray[currLen]); 
-            currLen++;
-        }
+        if (value == -1)
+            break;
 
-        else
+        // Resize if full
+        if (currLen == size)
         {
             size = size * 2;
-            printf("After enlarge size is %d\n", size);
-            int bigArray[size];
-            for (int i = 0; i < currLen; i++)
-            {
-                bigArray[i] = newArray[i];
-                printf("this is in the new array %d\n", bigArray[i]);
+            printf("Resizing array to %d\n", size);
+
+            int *temp = realloc(newArray, size * sizeof(int));
+            if (temp == NULL) {
+                printf("Reallocation failed\n");
+                free(newArray);
+                return 1;
             }
-            bigArray[currLen] = value;
-            currLen++;
-            ptr = bigArray;
+
+            newArray = temp;
         }
+
+        newArray[currLen] = value;
+        printf("Stored: %d\n", newArray[currLen]);
+
+        currLen++;
     }
+
+    printf("\nFinal Array:\n");
+    for (int i = 0; i < currLen; i++)
+        printf("%d ", newArray[i]);
+
+    free(newArray);
+    return 0;
 }
