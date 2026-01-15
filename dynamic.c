@@ -44,7 +44,7 @@ void insertFromIndex(int *arr, int currLen, int index, int value)
 
 void deleteAtIndex(int *arr, int currLen, int index)
 {
-    if
+    
         if (index < 0 || index > currLen)
 
         {
